@@ -22,7 +22,7 @@ final class Scoreboard{
 
     public function create(Player $player, string $objectiveName, string $displayName) : self{
         if (isset($this->scoreboards[$player->getName()])) {
-            $this->removeObjective($player);
+            $this->remove($player);
         }
         $player->getNetworkSession()->sendDataPacket(SetDisplayObjectivePacket::create(SetDisplayObjectivePacket::DISPLAY_SLOT_SIDEBAR, $objectiveName, $displayName, "dummy", SetDisplayObjectivePacket::SORT_ORDER_ASCENDING));
         $this->scoreboards[$player->getName()] = $objectiveName;
@@ -41,16 +41,15 @@ final class Scoreboard{
         return $this;
     }
 
-    public function removeObjective(Player $player) : void{
+    public function remove(Player $player) : void{
         if (!isset($this->scoreboards[$player->getName()])) {
             return;
         }
-        $pk = RemoveObjectivePacket::create($this->scoreboards[$player->getName()]);
-        $player->getNetworkSession()->sendDataPacket($pk);
+        $player->getNetworkSession()->sendDataPacket(RemoveObjectivePacket::create($this->scoreboards[$player->getName()]));
         $this->clearPlayerCache($player);
     }
 
-    public function setLine(PLayer $player, int $line, string $message) : self{
+    public function setLine(PLayer $player, int $line, string $context) : self{
         if ($line < self::MIN_SCORE || $line > self::MAX_SCORE || !isset($this->scoreboards[$player->getName()])) {
             return $this;
         }
@@ -58,7 +57,7 @@ final class Scoreboard{
         $entry = new ScorePacketEntry();
         $entry->objectiveName = $this->scoreboards[$player->getName()];
         $entry->type = ScorePacketEntry::TYPE_FAKE_PLAYER;
-        $entry->customName = $message;
+        $entry->customName = $context;
         $entry->score = $line;
         $entry->scoreboardId = $line;
 
@@ -66,7 +65,11 @@ final class Scoreboard{
         return $this;
     }
 
-    public function removeLine(PLayer $player, int $line) : self{
+    public function removeLine(PLayer $player, int $line, bool $brutal = false) : self{
+        if (!$brutal) {
+            $this->setLine($player, $line, "");
+            return $this;
+        }
         if ($line < self::MIN_SCORE || $line > self::MAX_SCORE || !isset($this->scoreboards[$player->getName()])) {
             return $this;
         }
