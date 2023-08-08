@@ -92,11 +92,11 @@ final class Scoreboard{
 
     public function update(Player $player) : self{
         if (!empty($this->change_entries[$player->getName()])) {
-            $player->getNetworkSession()->sendDataPacket(SetScorePacket::create(SetScorePacket::TYPE_CHANGE, $this->change_entries));
+            $player->getNetworkSession()->sendDataPacket(SetScorePacket::create(SetScorePacket::TYPE_CHANGE, $this->change_entries[$player->getName()]));
 
         }
         if (!empty($this->remove_entries[$player->getName()])) {
-            $player->getNetworkSession()->sendDataPacket(SetScorePacket::create(SetScorePacket::TYPE_REMOVE, $this->remove_entries));
+            $player->getNetworkSession()->sendDataPacket(SetScorePacket::create(SetScorePacket::TYPE_REMOVE, $this->remove_entries[$player->getName()]));
         }
         unset($this->change_entries[$player->getName()], $this->change_entries[$player->getName()]);
         return $this;
