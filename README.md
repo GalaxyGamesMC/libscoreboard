@@ -34,7 +34,7 @@ $this->scoreboard->setDisplayName($player, $newDisplayName);
 ```
 ## 2. Lines
 > **Important**
-These following instructions won't immediately show the changed line to player, they are required to send this code after the changes as the requirement to get it shown to player!<br>
+> These following instructions won't immediately show the changed line to player, they are required to send this code after the changes as the requirement to get it shown to player!<br>
 ```php
 $this->scoreboard->update($player)
 ```
@@ -74,15 +74,30 @@ $this->scoreboard->removeLine($player, 0); //Remove line 0 without leave behind 
 ```
 ### 2.3 Fluent code style
 > **Note**
-All the above instructions can be written as this
+> All the above instructions can be written as this
 ```php
 $this->scoreboard->create($player, "board", "My board")
-    ->setLine($player, 0, "line 0")
-    ->floodLine($player, 1, 12)
-    ->setLine($player, 13, "line 13")
-    ->removeLine($player, 9)
+    ->setLine($player, 0, Scoreboard::makeUnique(0, "unique"))
+    ->setLine($player, 1, Scoreboard::makeUnique(1, "unique"))
+    ->setLine($player, 2, Scoreboard::makeUnique(2, ""))
+    ->setLine($player, 3, Scoreboard::makeUnique(3, ""))
     ->update($player);
 ```
+### 2.4 Make Unique
+Because each lines must have a unique context, if you put a set of two lines with the same context it will fail...
+To solve this, use `Scoreboard::makeUnique`
+
+```php
+$this->scoreboard->create($player, "board", "My board")
+    ->setLine($player, 0, Scoreboard::makeUnique(0, "unique"))
+    ->setLine($player, 1, Scoreboard::makeUnique(0, "unique"))
+    ->setLine($player, 2, Scoreboard::makeUnique(0, ""))
+    ->setLine($player, 3, Scoreboard::makeUnique(0, ""));
+```
+![image](https://github.com/GalaxyGamesMC/libscoreboard/assets/54394881/95a63a13-0af1-4b84-8341-b7b287f0be5d)
+->
+![image](https://github.com/GalaxyGamesMC/libscoreboard/assets/54394881/e8f1df6e-c1f2-4761-bade-f765e3fdc841)
+
 ## 3. Other functions
 
 ```php

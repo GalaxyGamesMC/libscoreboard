@@ -13,8 +13,8 @@ use pocketmine\utils\SingletonTrait;
 final class Scoreboard{
     use SingletonTrait;
 
-    public const MIN_SCORE = 1;
-    public const MAX_SCORE = 15;
+    public const MIN_SCORE = 0;
+    public const MAX_SCORE = 14;
 
     protected array $scoreboards = [];
     protected array $change_entries = [];
@@ -53,7 +53,6 @@ final class Scoreboard{
         if ($line < self::MIN_SCORE || $line > self::MAX_SCORE || !isset($this->scoreboards[$player->getName()])) {
             return $this;
         }
-
         $entry = new ScorePacketEntry();
         $entry->objectiveName = $this->scoreboards[$player->getName()];
         $entry->type = ScorePacketEntry::TYPE_FAKE_PLAYER;
@@ -65,9 +64,14 @@ final class Scoreboard{
         return $this;
     }
 
+    public static function makeUnique(int $line, string $context) : string{
+        assert($line >= self::MIN_SCORE && $line <= self::MAX_SCORE, "Unique line must be in range " . self::MIN_SCORE . " to " . self::MAX_SCORE . "!");
+        return $context . str_repeat("\0", $line);
+    }
+
     public function removeLine(PLayer $player, int $line, bool $brutal = false) : self{
         if (!$brutal) {
-            $this->setLine($player, $line, "");
+            $this->setLine($player, $line, self::makeUnique($line, ""));
             return $this;
         }
         if ($line < self::MIN_SCORE || $line > self::MAX_SCORE || !isset($this->scoreboards[$player->getName()])) {
@@ -84,7 +88,8 @@ final class Scoreboard{
 
     public function floodLine(Player $player, int $start = self::MIN_SCORE, int $end = self::MAX_SCORE, string $flood = "") : self{
         while ($start <= $end) {
-            $this->setLine($player, $start++, $flood);
+            $this->setLine($player, $start, self::makeUnique($start, $flood));
+            $start++;
         }
 
         return $this;
