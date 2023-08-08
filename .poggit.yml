@@ -1,0 +1,10 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/GalaxyGamesMC/libscoreboard
+build-by-default: true
+branches:
+- main
+projects:
+  libscoreboard:
+    path: ""
+    model: virion
+    type: library
+...
