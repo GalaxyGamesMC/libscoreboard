@@ -77,10 +77,10 @@ $this->scoreboard->removeLine($player, 0); //Remove line 0 without leave behind 
 > All the above instructions can be written as this
 ```php
 $this->scoreboard->create($player, "board", "My board")
-    ->setLine($player, 0, Scoreboard::makeUnique(0, "unique"))
-    ->setLine($player, 1, Scoreboard::makeUnique(1, "unique"))
-    ->setLine($player, 2, Scoreboard::makeUnique(2, ""))
-    ->setLine($player, 3, Scoreboard::makeUnique(3, ""))
+    ->setLine($player, 0, "line 0")
+    ->floodLine($player, 1, 12)
+    ->setLine($player, 13, "line 13")
+    ->removeLine($player, 9)
     ->update($player);
 ```
 ### 2.4 Make Unique
