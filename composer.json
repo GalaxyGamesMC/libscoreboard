@@ -4,9 +4,6 @@
   "minimum-stability": "stable",
   "type": "library",
   "license": "GPL-3.0",
-  "require": {
-    "pocketmine/pocketmine-mp": "^5.0.0"
-  },
   "authors": [
     {
       "name": "arie1906",
