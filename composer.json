@@ -1,0 +1,24 @@
+{
+  "name": "galaxygames/libscoreboard",
+  "description": "libscoreboard",
+  "minimum-stability": "stable",
+  "license": "GPL-3.0",
+  "require": {
+    "pocketmine/pocketmine-mp": "^5.0.0"
+  },
+  "authors": [
+    {
+      "name": "arie1906",
+      "email": "arie1906@thegalaxype.com"
+    }
+  ],
+  "autoload": {
+    "classmap": ["src"]
+  },
+  "extra": {
+    "virion": {
+      "spec": "3.0",
+      "namespace-root": "galaxygames\\scoreboard"
+    }
+  }
+}

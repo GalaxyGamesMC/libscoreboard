@@ -101,7 +101,7 @@ $this->scoreboard->create($player, "board", "My board")
 ## 3. Other functions
 
 ```php
-Scoreboard::getObjectiveName(Player $player); // Return the current scoreboard's name of a player
+Scoreboard::getObjectiveName(Player $player); // Return the current color's name of a player
 Scoreboard::clearPlayerCache(Player $player); // This should be called when player left the server
 Scoreboard::clearCache(); // Clear all data
 ```
