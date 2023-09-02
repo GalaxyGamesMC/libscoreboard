@@ -56,7 +56,7 @@ final class Scoreboard{
         $entry = new ScorePacketEntry();
         $entry->objectiveName = $this->scoreboards[$player->getName()];
         $entry->type = ScorePacketEntry::TYPE_FAKE_PLAYER;
-        $entry->customName = $context;
+        $entry->customName = str_repeat("\0", $line) . $context;
         $entry->score = $line;
         $entry->scoreboardId = $line;
 
@@ -64,14 +64,9 @@ final class Scoreboard{
         return $this;
     }
 
-    public static function makeUnique(int $line, string $context) : string{
-        assert($line >= self::MIN_SCORE && $line <= self::MAX_SCORE, "Unique line must be in range " . self::MIN_SCORE . " to " . self::MAX_SCORE . "!");
-        return $context . str_repeat("\0", $line);
-    }
-
     public function removeLine(PLayer $player, int $line, bool $brutal = false) : self{
         if (!$brutal) {
-            $this->setLine($player, $line, self::makeUnique($line, ""));
+            $this->setLine($player, $line, "");
             return $this;
         }
         if ($line < self::MIN_SCORE || $line > self::MAX_SCORE || !isset($this->scoreboards[$player->getName()])) {
@@ -88,15 +83,14 @@ final class Scoreboard{
 
     public function floodLine(Player $player, int $start = self::MIN_SCORE, int $end = self::MAX_SCORE, string $flood = "") : self{
         while ($start <= $end) {
-            $this->setLine($player, $start, self::makeUnique($start, $flood));
-            $start++;
+            $this->setLine($player, $start++, $flood);
         }
 
         return $this;
     }
 
     public function update(Player $player) : self{
-        if (!empty($this->change_entries[$player->getName()])) {
+        if (!empty($this->change_entries[$$player->getName()])) {
             $player->getNetworkSession()->sendDataPacket(SetScorePacket::create(SetScorePacket::TYPE_CHANGE, $this->change_entries[$player->getName()]));
 
         }
