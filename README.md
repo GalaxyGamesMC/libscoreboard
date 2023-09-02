@@ -73,8 +73,6 @@ $this->scoreboard->removeLine($player, 1); //Remove line 1 and leave behind an e
 $this->scoreboard->removeLine($player, 0); //Remove line 0 without leave behind an empty line
 ```
 ### 2.3 Fluent code style
-> **Note**
-> All the above instructions can be written as this
 ```php
 $this->scoreboard->create($player, "board", "My board")
     ->setLine($player, 0, "line 0")
@@ -84,6 +82,11 @@ $this->scoreboard->create($player, "board", "My board")
     ->update($player);
 ```
 ### 2.4 Make Unique
+> **Important**
+> (REMOVED!), All lines are made unique by default.
+> 
+<details> <summary>Redundant</summary>
+
 Because each lines must have a unique context, if you put a set of two lines with the same context it will fail...
 To solve this, use `Scoreboard::makeUnique`
 
@@ -97,6 +100,7 @@ $this->scoreboard->create($player, "board", "My board")
 ![image](https://github.com/GalaxyGamesMC/libscoreboard/assets/54394881/95a63a13-0af1-4b84-8341-b7b287f0be5d)
 ->
 ![image](https://github.com/GalaxyGamesMC/libscoreboard/assets/54394881/e8f1df6e-c1f2-4761-bade-f765e3fdc841)
+</details>
 
 ## 3. Other functions
 
