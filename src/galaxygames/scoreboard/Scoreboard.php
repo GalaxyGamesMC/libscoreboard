@@ -56,7 +56,7 @@ final class Scoreboard{
         $entry = new ScorePacketEntry();
         $entry->objectiveName = $this->scoreboards[$player->getName()];
         $entry->type = ScorePacketEntry::TYPE_FAKE_PLAYER;
-        $entry->customName = str_repeat("\0", $line) . $context;
+        $entry->customName = $context . str_repeat("\0", $line);
         $entry->score = $line;
         $entry->scoreboardId = $line;
 
@@ -90,7 +90,7 @@ final class Scoreboard{
     }
 
     public function update(Player $player) : self{
-        if (!empty($this->change_entries[$$player->getName()])) {
+        if (!empty($this->change_entries[$player->getName()])) {
             $player->getNetworkSession()->sendDataPacket(SetScorePacket::create(SetScorePacket::TYPE_CHANGE, $this->change_entries[$player->getName()]));
 
         }
